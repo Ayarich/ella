@@ -1,0 +1,106 @@
+"use client";
+import { useEffect, useState, type FormEvent } from "react";
+import Image from "next/image";
+import { ArrowDownRight, ArrowRight, ArrowUpRight, CalendarDays, Check, CheckCircle2, ChevronLeft, ChevronRight, ClipboardList, Clock3, FileCheck2, Globe2, Inbox, Instagram, Mail, MapPin, Menu, MessageCircle, Phone, Plane, Presentation, Search, Send, Sparkles, X } from "lucide-react";
+
+const WHATSAPP = "233595266356";
+const EMAIL = "virtualservicese@gmail.com";
+const services = [
+  { num: "01", title: "Email management", text: "An organized inbox, well-prioritized messages, and timely responses that keep you on track.", icon: Inbox },
+  { num: "02", title: "Calendar & social media", text: "Seamless appointment scheduling, content coordination, and meaningful audience engagement.", icon: CalendarDays },
+  { num: "03", title: "Data entry", text: "Accurate, dependable data entry and records management for everyday operations.", icon: ClipboardList },
+  { num: "04", title: "Travel arrangements", text: "Thoughtful research, organized itineraries, and travel logistics without the stress.", icon: Plane },
+];
+const extras = [
+  { title: "Document preparation & proofreading", icon: FileCheck2 },
+  { title: "Research assistance", icon: Search },
+  { title: "Slide & presentation design", icon: Presentation },
+  { title: "Custom remote support", icon: Globe2 },
+];
+const gallery = [
+  { title: "Meeting minutes", category: "ADMIN SUPPORT", image: "/images/project-minutes.jpg", description: "Structured minutes and meeting documentation." },
+  { title: "Travel itinerary", category: "TRAVEL PLANNING", image: "/images/project-travel.jpg", description: "Well-organized travel schedules and plans." },
+  { title: "Inbox management", category: "EMAIL SUPPORT", image: "/images/project-email-2.jpg", description: "Inbox organization and message management." },
+  { title: "Calendar management", category: "SCHEDULING", image: "/images/project-calendar.jpg", description: "A clear view of appointments, tasks, and deadlines." },
+  { title: "Email organization", category: "EMAIL SUPPORT", image: "/images/project-email-1.jpg", description: "Hands-on email workflow support." },
+  { title: "Itinerary planning", category: "TRAVEL PLANNING", image: "/images/project-travel-2.jpg", description: "Travel schedule records and coordinated logistics." },
+];
+const tools = [
+  { label: "Google Workspace", src: "/images/tool-google.png" },
+  { label: "Canva", src: "/images/tool-canva.jpg" },
+  { label: "Notion", src: "/images/tool-notion.jpg" },
+  { label: "Microsoft Teams", src: "/images/tool-teams.jpg" },
+  { label: "Google Meet", src: "/images/tool-meet.png" },
+  { label: "Airtable", src: "/images/tool-airtable.png" },
+  { label: "Dropbox", src: "/images/tool-dropbox.png" },
+  { label: "Instagram", src: "/images/tool-instagram.jpg" },
+];
+const links = [ { label: "About", href: "#about" }, { label: "Services", href: "#services" }, { label: "Projects", href: "#projects" }, { label: "Contact", href: "#contact" } ];
+const wa = (message: string) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+export default function Portfolio() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [request, setRequest] = useState({ name: "", email: "", service: "", details: "" });
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelected(null);
+      if (selected === null) return;
+      if (e.key === "ArrowRight") setSelected((selected + 1) % gallery.length);
+      if (e.key === "ArrowLeft") setSelected((selected - 1 + gallery.length) % gallery.length);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [selected]);
+  const handleRequest = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const text = `Hello Ella! I'd like to request a service.\n\nName: ${request.name}\nEmail: ${request.email}\nService: ${request.service}\nDetails: ${request.details}`;
+    window.open(wa(text), "_blank", "noopener,noreferrer");
+    setSubmitted(true);
+  };
+  return <>
+    <header className="site-header"><div className="container header-inner">
+      <a className="brand" href="#home" aria-label="Ella Virtual Services home"><span className="brand-mark">e<span>.</span></span><span className="brand-name">ella <small>virtual services</small></span></a>
+      <nav className={`nav ${menuOpen ? "nav-open" : ""}`} aria-label="Main navigation">{links.map(link => <a key={link.href} onClick={() => setMenuOpen(false)} href={link.href}>{link.label}</a>)}<a className="mobile-contact" href={wa("Hello Ella, I'd love to work with you!")} target="_blank" rel="noreferrer">Let’s talk <ArrowUpRight size={16} /></a></nav>
+      <a className="header-cta" href={wa("Hello Ella, I'd love to work with you!")} target="_blank" rel="noreferrer">Let’s talk <ArrowUpRight size={17} /></a>
+      <button className="menu-toggle" type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
+    </div></header>
+
+    <main id="home">
+      <section className="hero"><div className="container hero-grid">
+        <div className="hero-copy"><div className="eyebrow"><span className="tiny-star">✳</span> YOUR RELIABLE VIRTUAL PARTNER</div>
+          <h1>Hello, I’m <em>Ella.</em><br />Your behind-the-scenes <span className="italic-underline">superpower.</span></h1>
+          <p>Helping busy professionals, students, and growing businesses stay organized, get more done, and make room for what matters.</p>
+          <div className="hero-actions"><a className="btn btn-primary" href="#contact">Let’s work together <ArrowUpRight size={18}/></a><a className="text-link" href="#services">Explore my services <ArrowDownRight size={17}/></a></div>
+          <div className="hero-note"><span className="note-spark">✳</span><span>More focus for you.<br /><strong>Less on your to-do list.</strong></span></div>
+        </div>
+        <div className="hero-visual"><div className="hero-image-wrap"><Image src="/images/ella-portrait.jpg" alt="Ella, virtual assistant" fill priority sizes="(max-width: 900px) 85vw, 500px" className="hero-image" /></div><div className="hero-image-border"/><div className="floating-card"><span className="floating-icon"><Check size={20}/></span><div><strong>Consider it handled.</strong><span>Organized. Efficient. On time.</span></div></div><div className="hero-decor">✳</div></div>
+      </div><div className="hero-bottom container"><span>YOUR TIME IS VALUABLE. LET’S MAKE THE MOST OF IT.</span><a href="#about" aria-label="Scroll to about"><ArrowDownRight size={22}/></a></div></section>
+
+      <section className="about section-pad" id="about"><div className="container about-grid"><div className="about-art"><div className="about-art-frame"><Image src="/images/ella-portrait.jpg" alt="Ella smiling outdoors" fill sizes="(max-width: 900px) 85vw, 440px" /></div><div className="about-sticker">HERE TO MAKE<br /><em>LIFE EASIER!</em><span>✷</span></div><span className="about-art-caption">A little help goes a long way.</span></div>
+      <div className="about-copy"><span className="section-kicker">01 / GET TO KNOW ME</span><h2>Thoughtful support.<br /><em>Real impact.</em></h2><p className="lead">I’m a trained virtual assistant with a background in administrative support, digital tools, and digital marketing.</p><p>I help keep day-to-day operations running smoothly—from organizing schedules and managing inboxes to supporting content creation, research, social media, and your online presence.</p><p>My goal? A more structured workflow for you, and the freedom to focus on growth, opportunities, and results.</p><a className="btn btn-outline" href="#experience">A little more about me <ArrowDownRight size={17}/></a></div></div></section>
+
+      <section className="experience section-pad" id="experience"><div className="container"><div className="section-top"><div><span className="section-kicker">02 / MY JOURNEY</span><h2>The experience <em>behind the work.</em></h2></div><p>Equipped with the right knowledge, skills, and a love for making things easier.</p></div><div className="experience-grid">
+       <article className="experience-card"><div className="experience-logo"><Image src="/images/knust-logo.png" alt="KNUST crest" width={64} height={76} style={{objectFit:"contain"}}/></div><div className="experience-type">EDUCATION · 2021–2024</div><h3>BSc. Business Information Technology</h3><p>Kwame Nkrumah University of Science and Technology (KNUST)</p></article>
+       <article className="experience-card"><div className="experience-logo"><Image src="/images/alx-logo.jpg" alt="ALX logo" width={90} height={70} style={{objectFit:"contain"}}/></div><div className="experience-type">TRAINING · 2024</div><h3>Virtual Assistant Programme</h3><p>ALX Virtual Assistant Training</p></article>
+       <article className="experience-card"><div className="experience-logo"><Image src="/images/cluegroup-logo.jpg" alt="Cluegroup Writing Services logo" width={150} height={70} style={{objectFit:"contain"}}/></div><div className="experience-type">EXPERIENCE · 2022–2023</div><h3>Editor, Proofreader & Researcher</h3><p>Cluegroup Writing Services</p></article>
+      </div><a href="/images/alx-certificate.png" className="certificate-link" target="_blank" rel="noreferrer">View virtual assistant training certificate <ArrowUpRight size={16}/></a></div></section>
+
+      <section className="services section-pad" id="services"><div className="container"><div className="section-top"><div><span className="section-kicker">03 / WHAT I CAN DO FOR YOU</span><h2>Less busywork.<br /><em>More breathing room.</em></h2></div><p>The everyday details, taken care of with intention so you can stay focused on the bigger picture.</p></div><div className="services-grid">{services.map(({num,title,text,icon:Icon})=><article className="service-card" key={num}><div className="service-top"><span>{num} / SERVICE</span><Icon size={27} strokeWidth={1.5}/></div><h3>{title}</h3><p>{text}</p><a href={wa(`Hello Ella, I'm interested in your ${title} service.`)} target="_blank" rel="noreferrer" aria-label={`Enquire about ${title}`}><ArrowUpRight size={19}/></a></article>)}</div>
+      <div className="extra-services"><div className="extra-intro"><span className="section-kicker">ALSO HERE TO HELP</span><h3>And a little <em>more...</em></h3><p>Have something else in mind? Let’s find a solution that works for you.</p></div><div className="extra-list">{extras.map(({title,icon:Icon})=><div key={title}><Icon size={21} strokeWidth={1.6}/><span>{title}</span><CheckCircle2 size={16} className="extra-check"/></div>)}</div></div>
+      </div></section>
+
+      <section className="tools-strip"><div className="container"><div className="tools-heading"><span>TOOLS OF MY TRADE</span><p>A familiar toolkit for seamless collaboration.</p></div><div className="tools-grid">{tools.map(t=><div className="tool" key={t.label} title={t.label}><Image src={t.src} alt={t.label} width={84} height={56} sizes="84px" style={{objectFit:"contain"}}/><small>{t.label}</small></div>)}</div></div></section>
+
+      <section className="projects section-pad" id="projects"><div className="container"><div className="section-top"><div><span className="section-kicker">04 / A LOOK AT MY WORK</span><h2>Little details.<br /><em>Beautifully handled.</em></h2></div><p>A glimpse of the real tasks and projects I’ve worked on—from inboxes to itineraries.</p></div><div className="projects-grid">{gallery.map((p,i)=><button type="button" className="project-card" key={p.title} onClick={()=>setSelected(i)} aria-label={`View ${p.title} project`}><div className="project-image"><Image src={p.image} alt={`${p.title} work sample`} fill sizes="(max-width: 650px) 100vw, (max-width: 1000px) 50vw, 33vw"/><span className="project-open"><ArrowUpRight size={21}/></span></div><div className="project-caption"><div><span>{p.category}</span><h3>{p.title}</h3></div><ArrowUpRight size={21}/></div></button>)}</div></div></section>
+
+      <section className="process section-pad" id="process"><div className="container process-grid"><div><span className="section-kicker">05 / HOW IT WORKS</span><h2>Getting started is <em>simple.</em></h2><p>Whether you need one-time support or someone reliable in your corner for the long run, there’s a way to work together.</p><a className="btn btn-primary" href="#contact">Send a request <ArrowUpRight size={17}/></a></div><div className="process-steps"><div><span>01</span><div><h3>Tell me what you need</h3><p>Share the tasks, your goals, and any deadlines through the request form below.</p></div></div><div><span>02</span><div><h3>Let’s talk details</h3><p>For one-time requests, I aim to follow up within 24 hours. For ongoing support, reach me directly via WhatsApp or email.</p></div></div><div><span>03</span><div><h3>Leave it with me</h3><p>We agree on the next steps, and I get to work helping things run smoothly.</p></div></div></div></div></section>
+
+      <section className="contact section-pad" id="contact"><div className="container contact-grid"><div className="contact-copy"><span className="section-kicker">06 / LET’S CONNECT</span><h2>Let’s make <em>great things</em> happen.</h2><p>Have a task, an idea, or a growing to-do list? Tell me about it. I’d love to help.</p><div className="contact-methods"><a href={`mailto:${EMAIL}`}><span><Mail size={20}/></span><div><small>EMAIL ME</small><strong>{EMAIL}</strong></div><ArrowUpRight size={17}/></a><a href={wa("Hello Ella, I'd like to discuss working together.")} target="_blank" rel="noreferrer"><span><MessageCircle size={20}/></span><div><small>LET’S CHAT</small><strong>+233 59 526 6356</strong></div><ArrowUpRight size={17}/></a><a href="tel:+233262888539"><span><Phone size={20}/></span><div><small>ALTERNATIVE PHONE</small><strong>+233 26 288 8539</strong></div><ArrowUpRight size={17}/></a></div><a className="blog-link" href="https://medium.com/@b.ae" target="_blank" rel="noreferrer">Read my writing on Medium <ArrowUpRight size={16}/></a></div>
+      <div className="request-card"><div className="request-header"><span className="request-icon"><Send size={21}/></span><div><h3>Tell me about your project</h3><p>For one-time service enquiries.</p></div></div><form onSubmit={handleRequest}><label htmlFor="name">Your name</label><input required id="name" name="name" autoComplete="name" value={request.name} onChange={e=>setRequest({...request,name:e.target.value})} placeholder="What should I call you?"/><label htmlFor="email">Email address</label><input required type="email" id="email" name="email" autoComplete="email" value={request.email} onChange={e=>setRequest({...request,email:e.target.value})} placeholder="you@example.com"/><label htmlFor="service">How can I help?</label><select required id="service" name="service" value={request.service} onChange={e=>setRequest({...request,service:e.target.value})}><option value="">Select a service</option>{[...services.map(s=>s.title),...extras.map(e=>e.title)].map(s=><option key={s}>{s}</option>)}</select><label htmlFor="details">Tell me a bit more</label><textarea required id="details" name="details" rows={4} value={request.details} onChange={e=>setRequest({...request,details:e.target.value})} placeholder="Your project, timeline, and what you'd like help with..."/><button type="submit" className="btn btn-primary form-submit">Continue to WhatsApp <ArrowUpRight size={17}/></button><p className="form-info"><Clock3 size={15}/> Your message opens in WhatsApp for you to send. {submitted ? "If WhatsApp didn’t open, check your browser’s pop-up settings." : "I aim to respond within 24 hours to one-time enquiries."}</p></form></div></div></section>
+    </main>
+    <footer><div className="container footer-inner"><a href="#home" className="footer-brand">ella<span>.</span><small>virtual services</small></a><p>Thoughtful support, one task at a time.</p><div><a href="#about">About</a><a href="#services">Services</a><a href="#projects">Work</a><a href="#contact">Contact</a></div></div><div className="container footer-base"><span>© {new Date().getFullYear()} Ella Virtual Services. All rights reserved.</span><a href="#home">Back to top ↑</a></div></footer>
+    {selected!==null && <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${gallery[selected].title} project preview`} onMouseDown={()=>setSelected(null)}><button className="lightbox-close" type="button" onClick={()=>setSelected(null)} aria-label="Close preview"><X/></button><button className="lightbox-prev" type="button" onClick={e=>{e.stopPropagation();setSelected((selected-1+gallery.length)%gallery.length)}} aria-label="Previous project"><ChevronLeft/></button><div className="lightbox-content" onMouseDown={e=>e.stopPropagation()}><div className="lightbox-img"><Image src={gallery[selected].image} alt={`${gallery[selected].title} sample enlarged`} fill sizes="90vw" style={{objectFit:"contain"}} /></div><span>{gallery[selected].category} · {selected+1} / {gallery.length}</span><h3>{gallery[selected].title}</h3><p>{gallery[selected].description}</p></div><button className="lightbox-next" type="button" onClick={e=>{e.stopPropagation();setSelected((selected+1)%gallery.length)}} aria-label="Next project"><ChevronRight/></button></div>}
+  </>;
+}
